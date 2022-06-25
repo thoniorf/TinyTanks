@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     [Space]
     [SerializeField] private InputReader _inputReader = default;
+    private PlayerInputManager _playerInputManager;
 
     [Header("Event channels")]
     [Space]
@@ -25,19 +26,40 @@ public class GameManager : MonoBehaviour
         if (!DestroyOnLoad)
             DontDestroyOnLoad(gameObject);
 
+        _playerInputManager = GetComponent<PlayerInputManager>();
+        // events
+        enablePlayerInputEvents();
         _inputReader.PauseEvent += Pause;
-
         _gameModeEventChannel.PlayerScoreEvent += PlayerScore;
     }
 
     private void OnDisable()
     {
+        // events
+        disablePlayerInputEvents();
         _inputReader.PauseEvent -= Pause;
     }
 
-    private void Pause()
+    private void enablePlayerInputEvents()
     {
-        isPaused = !isPaused;
+        _playerInputManager.onPlayerJoined += onLocalPlayerJoined;
+        _playerInputManager.onPlayerLeft += onLocalPlayerLeft;
+    }
+
+    private void disablePlayerInputEvents()
+    {
+        _playerInputManager.onPlayerJoined -= onLocalPlayerJoined;
+        _playerInputManager.onPlayerLeft -= onLocalPlayerLeft;
+    }
+
+    private void onLocalPlayerJoined(PlayerInput obj)
+    {
+        Debug.Log("Player joined with " + obj.currentControlScheme);
+    }
+
+    private void onLocalPlayerLeft(PlayerInput obj)
+    {
+        throw new NotImplementedException();
     }
 
     private void PlayerScore()
@@ -45,6 +67,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("Player Scored");
     }
 
-
-
+    private void Pause()
+    {
+        isPaused = !isPaused;
+    }
 }
