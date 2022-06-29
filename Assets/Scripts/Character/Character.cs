@@ -119,11 +119,6 @@ public class Character : MonoBehaviour
         AttackEvent.Invoke();
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-
-    }
-
     private void OnCollisionExit(Collision other)
     {
         isColliding = false;

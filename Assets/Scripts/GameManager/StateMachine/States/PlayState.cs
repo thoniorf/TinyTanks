@@ -14,6 +14,7 @@ public class PlayState : GameManagerState
         AsyncSceneLoader asyncSceneLoader = _gm.GetComponent<AsyncSceneLoader>();
         asyncSceneLoader.asyncLoadSample();
         _gm.isPaused = false;
+        _gm.SetGameModeLocalMultiplayer();
     }
 
     public override void exitState()

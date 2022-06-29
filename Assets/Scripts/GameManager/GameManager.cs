@@ -9,13 +9,14 @@ public class GameManager : MonoBehaviour
 {
 
     public bool isPaused;
-    [field: SerializeField]
-    private bool DestroyOnLoad { get; set; }
+    [field: SerializeField] private bool DestroyOnLoad { get; set; }
 
     [Header("References")]
     [Space]
     [SerializeField] private InputReader _inputReader = default;
     private PlayerInputManager _playerInputManager;
+    private GameMode _gameMode;
+
 
     [Header("Event channels")]
     [Space]
@@ -27,39 +28,18 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
         _playerInputManager = GetComponent<PlayerInputManager>();
+
         // events
-        enablePlayerInputEvents();
         _inputReader.PauseEvent += Pause;
         _gameModeEventChannel.PlayerScoreEvent += PlayerScore;
     }
 
     private void OnDisable()
     {
+        if (_gameMode != null) _gameMode.Disable();
         // events
-        disablePlayerInputEvents();
         _inputReader.PauseEvent -= Pause;
-    }
-
-    private void enablePlayerInputEvents()
-    {
-        _playerInputManager.onPlayerJoined += onLocalPlayerJoined;
-        _playerInputManager.onPlayerLeft += onLocalPlayerLeft;
-    }
-
-    private void disablePlayerInputEvents()
-    {
-        _playerInputManager.onPlayerJoined -= onLocalPlayerJoined;
-        _playerInputManager.onPlayerLeft -= onLocalPlayerLeft;
-    }
-
-    private void onLocalPlayerJoined(PlayerInput obj)
-    {
-        Debug.Log("Player joined with " + obj.currentControlScheme);
-    }
-
-    private void onLocalPlayerLeft(PlayerInput obj)
-    {
-        throw new NotImplementedException();
+        _gameModeEventChannel.PlayerScoreEvent -= PlayerScore;
     }
 
     private void PlayerScore()
@@ -70,5 +50,12 @@ public class GameManager : MonoBehaviour
     private void Pause()
     {
         isPaused = !isPaused;
+    }
+
+    public void SetGameModeLocalMultiplayer()
+    {
+        if (_gameMode != null) _gameMode.Disable();
+        _gameMode = new LocalMultiplayer(_playerInputManager);
+        _gameMode.Enable();
     }
 }
