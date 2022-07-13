@@ -117,7 +117,7 @@ public partial class @GameInputs : IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -147,7 +147,7 @@ public partial class @GameInputs : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6ea7e24e-247b-4051-9ea7-254caa89fe72"",
-                    ""path"": ""<Mouse>/position"",
+                    ""path"": ""<Mouse>/delta"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardAndMouse"",

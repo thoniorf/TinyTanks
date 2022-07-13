@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(PlayerInputReader))]
 public class Character : MonoBehaviour
 {
     public event UnityAction AttackEvent = delegate { };
@@ -20,9 +21,10 @@ public class Character : MonoBehaviour
 
     [Header("References")]
     [Space]
-    [SerializeField] private InputReader _inputReader = default;
     [SerializeField] private CharacterStats _statsSO = default;
+    [SerializeField] private PlayerInputReader _inputReader;
     [SerializeField] Transform _turret;
+    [SerializeField] Transform _aim;
 
     [Header("Input values")]
     [Space]
@@ -32,11 +34,13 @@ public class Character : MonoBehaviour
     [Header("Character stats")]
     [Space]
     [SerializeField] private int _speed = 10;
+    [SerializeField] private int _rotationSpeed = 5;
     [SerializeField] private int _hitPoints = 3;
 
 
     private void OnEnable()
     {
+        _inputReader = GetComponent<PlayerInputReader>();
         _inputReader.MoveEvent += Move;
         _inputReader.LookEvent += Look;
         _inputReader.AttackEvent += Attack;
@@ -52,6 +56,7 @@ public class Character : MonoBehaviour
     private void Start()
     {
         PropagateStatsFromSO();
+        lookVector = transform.position + transform.forward * 2f;
     }
 
     private void PropagateStatsFromSO()
@@ -67,12 +72,13 @@ public class Character : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+        CalculateAim();
         RotateTurret();
     }
 
     private void FixedUpdate()
     {
-        CalculateAim();
+
 
     }
 
@@ -86,22 +92,14 @@ public class Character : MonoBehaviour
 
     private void CalculateAim()
     {
-        const float cannonOffset = 0.6f;
-
-        Vector3 look = new Vector3(_lookInputVector.x, _lookInputVector.y, 0f);
-        Ray ray = Camera.main.ScreenPointToRay(look);
-
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Camera.main.farClipPlane))
-        {
-            lookVector = new Vector3(hit.point.x, cannonOffset, hit.point.z);
-        }
+        lookVector += new Vector3(_lookInputVector.x, 0f, _lookInputVector.y) * _rotationSpeed * Time.deltaTime;
+        _aim.transform.position = lookVector;
     }
 
     private void CalculateMovement()
     {
         Vector3 movement = new Vector3(_movementInputVector.x, 0f, _movementInputVector.y);
-        movementVector = movement;
+        movementVector = movement * _speed;
     }
 
     private void Move(Vector2 movement)

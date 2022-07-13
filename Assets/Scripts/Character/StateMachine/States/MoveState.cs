@@ -27,7 +27,7 @@ public class MoveState : CharacterState
 
     public override void updateState()
     {
-        _characterRigidBody.velocity = _character.movementVector * _character.speed;
+        _characterRigidBody.velocity = _character.movementVector;
 
         if (_characterRigidBody.velocity == Vector3.zero)
         {

@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour
 
     [Header("References")]
     [Space]
-    [SerializeField] private InputReader _inputReader = default;
     private PlayerInputManager _playerInputManager;
     private GameMode _gameMode;
 
@@ -29,27 +28,19 @@ public class GameManager : MonoBehaviour
 
         _playerInputManager = GetComponent<PlayerInputManager>();
 
-        // events
-        _inputReader.PauseEvent += Pause;
         _gameModeEventChannel.PlayerScoreEvent += PlayerScore;
     }
 
     private void OnDisable()
     {
         if (_gameMode != null) _gameMode.Disable();
-        // events
-        _inputReader.PauseEvent -= Pause;
+
         _gameModeEventChannel.PlayerScoreEvent -= PlayerScore;
     }
 
     private void PlayerScore()
     {
         Debug.Log("Player Scored");
-    }
-
-    private void Pause()
-    {
-        isPaused = !isPaused;
     }
 
     public void SetGameModeLocalMultiplayer()
