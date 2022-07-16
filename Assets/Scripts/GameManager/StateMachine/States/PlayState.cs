@@ -11,16 +11,16 @@ public class PlayState : GameManagerState
     public override void enterState()
     {
         Debug.Log("Play");
+        _gm.GameModeEventChannel.GameReady();
         AsyncSceneLoader asyncSceneLoader = _gm.GetComponent<AsyncSceneLoader>();
         asyncSceneLoader.asyncLoadSample();
         _gm.isPaused = false;
-        _gm.SetGameModeLocalMultiplayer();
+        _gm.GameModeEventChannel.GameStart();
     }
 
     public override void exitState()
     {
         Debug.Log("Pausing");
-
     }
 
     public override void tryGetTransition()

@@ -37,16 +37,26 @@ public class Character : MonoBehaviour
     [SerializeField] private int _rotationSpeed = 5;
     [SerializeField] private int _hitPoints = 3;
 
-
     private void OnEnable()
     {
         _inputReader = GetComponent<PlayerInputReader>();
+        EnableGamePlayInput();
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnDisable()
+    {
+        DisableGamePlayInput();
+    }
+
+    private void EnableGamePlayInput()
+    {
         _inputReader.MoveEvent += Move;
         _inputReader.LookEvent += Look;
         _inputReader.AttackEvent += Attack;
     }
 
-    private void OnDisable()
+    private void DisableGamePlayInput()
     {
         _inputReader.MoveEvent -= Move;
         _inputReader.LookEvent -= Look;

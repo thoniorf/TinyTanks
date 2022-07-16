@@ -9,7 +9,10 @@ public class GameManager : MonoBehaviour
 {
 
     public bool isPaused;
+    public List<Character> ActivePlayersList { get; private set; }
+    public int NumOfPlayer = 2;
     [field: SerializeField] private bool DestroyOnLoad { get; set; }
+
 
     [Header("References")]
     [Space]
@@ -19,23 +22,26 @@ public class GameManager : MonoBehaviour
 
     [Header("Event channels")]
     [Space]
-    [SerializeField] private GameModeEventChannel _gameModeEventChannel = default;
+    // Main menu event channel
+    public LobbyEventChannel LobbyEventChannel = default;
+    public GameModeEventChannel GameModeEventChannel = default;
+
 
     private void OnEnable()
     {
         if (!DestroyOnLoad)
             DontDestroyOnLoad(gameObject);
 
-        _playerInputManager = GetComponent<PlayerInputManager>();
+        // _playerInputManager = PlayerInputManager.Instantiate();
 
-        _gameModeEventChannel.PlayerScoreEvent += PlayerScore;
+        GameModeEventChannel.PlayerScoreEvent += PlayerScore;
     }
 
     private void OnDisable()
     {
         if (_gameMode != null) _gameMode.Disable();
 
-        _gameModeEventChannel.PlayerScoreEvent -= PlayerScore;
+        GameModeEventChannel.PlayerScoreEvent -= PlayerScore;
     }
 
     private void PlayerScore()
@@ -46,7 +52,16 @@ public class GameManager : MonoBehaviour
     public void SetGameModeLocalMultiplayer()
     {
         if (_gameMode != null) _gameMode.Disable();
-        _gameMode = new LocalMultiplayer(_playerInputManager);
-        _gameMode.Enable();
+        _gameMode = new LocalMultiplayer(PlayerInputManager.instance);
+    }
+
+    public void AddPlayerToActiveList(Character player)
+    {
+        if (ActivePlayersList == null)
+        {
+            ActivePlayersList = new List<Character>();
+        }
+
+        ActivePlayersList.Add(player);
     }
 }

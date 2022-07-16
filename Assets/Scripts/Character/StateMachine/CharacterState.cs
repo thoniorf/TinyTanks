@@ -23,7 +23,9 @@ public abstract class CharacterState : State
         _character.isColliding = true;
         if (other.gameObject.tag == "Bullet")
         {
+            // TODO shoot by who ?
             _character.hitPoints -= 1;
+            _stateMachine.GameModeEventChannel.PlayerHit();
         }
 
         if (_character.hitPoints == 0)
