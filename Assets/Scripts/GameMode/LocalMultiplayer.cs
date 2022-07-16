@@ -10,6 +10,7 @@ public class LocalMultiplayer : GameMode
     public LocalMultiplayer(PlayerInputManager playerInputManager) : base()
     {
         this._playerInputManager = playerInputManager;
+        GameType = GameType.Local;
     }
 
     public override void Enable()
@@ -43,4 +44,16 @@ public class LocalMultiplayer : GameMode
     {
         Debug.Log("Player with " + obj.currentControlScheme + " left");
     }
+
+    public override void Start()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void GameOver()
+    {
+        throw new NotImplementedException();
+    }
+
+
 }
