@@ -9,11 +9,12 @@ using System.Reflection;
 public class StateMachineEditor : Editor
 {
     SerializedProperty characterState;
+    SerializedProperty gameMode;
     string stateName;
     void OnEnable()
     {
         characterState = serializedObject.FindProperty("_currentState");
-
+        gameMode = serializedObject.FindProperty("GameModeEventChannel");
     }
 
     public override void OnInspectorGUI()
@@ -26,6 +27,11 @@ public class StateMachineEditor : Editor
             stateName = currentState.getStateName();
 
         EditorGUILayout.LabelField("State: ", currentState != null ? stateName : "not registered yet");
+
+        if (gameMode != null)
+        {
+            EditorGUILayout.PropertyField(gameMode);
+        }
 
         serializedObject.ApplyModifiedProperties();
     }
