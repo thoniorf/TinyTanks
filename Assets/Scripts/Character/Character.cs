@@ -56,7 +56,7 @@ public class Character : MonoBehaviour
     private void Start()
     {
         PropagateStatsFromSO();
-        lookVector = transform.position + transform.forward * 2f;
+        lookVector = _aim.transform.position;
     }
 
     private void PropagateStatsFromSO()
@@ -86,13 +86,14 @@ public class Character : MonoBehaviour
     {
         if (_turret != null)
         {
-            _turret.LookAt(lookVector);
+            _turret.LookAt(_aim.transform.position);
         }
     }
 
     private void CalculateAim()
     {
         lookVector += new Vector3(_lookInputVector.x, 0f, _lookInputVector.y) * _rotationSpeed * Time.deltaTime;
+        lookVector = Vector3.ClampMagnitude(lookVector, 10);
         _aim.transform.position = lookVector;
     }
 
