@@ -6,7 +6,7 @@ public class GameManagerStateFactory : IStateFactory
 {
     public PlayState GetPlayState(GameManagerStateMachine _gmStateMachine)
     {
-        return new PlayState(_gmStateMachine, this);
+        return new LocalPlayModeState(_gmStateMachine, this);
     }
 
     public PauseState GetPauseState(GameManagerStateMachine _gmStateMachine)

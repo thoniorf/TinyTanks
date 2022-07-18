@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayState : GameManagerState
+public abstract class PlayState : GameManagerState
 {
     public PlayState(GameManagerStateMachine stateMachine, GameManagerStateFactory stateFactory) : base(stateMachine, stateFactory)
     {
@@ -12,11 +12,12 @@ public class PlayState : GameManagerState
     {
         Debug.Log("Play");
         _gm.GameModeEventChannel.GameReady();
-        AsyncSceneLoader asyncSceneLoader = _gm.GetComponent<AsyncSceneLoader>();
-        asyncSceneLoader.asyncLoadSample();
+        loadScene();
         _gm.isPaused = false;
         _gm.GameModeEventChannel.GameStart();
     }
+
+    protected abstract void loadScene();
 
     public override void exitState()
     {

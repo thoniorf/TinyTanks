@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Event channels")]
     [Space]
-    // Main menu event channel
+    public MainMenuEventChannel MainMenuEventChannel = default;
     public LobbyEventChannel LobbyEventChannel = default;
     public GameModeEventChannel GameModeEventChannel = default;
 
@@ -47,12 +47,6 @@ public class GameManager : MonoBehaviour
     private void PlayerScore()
     {
         Debug.Log("Player Scored");
-    }
-
-    public void SetGameModeLocalMultiplayer()
-    {
-        if (_gameMode != null) _gameMode.Disable();
-        _gameMode = new LocalMultiplayer(PlayerInputManager.instance);
     }
 
     public void AddPlayerToActiveList(Character player)
