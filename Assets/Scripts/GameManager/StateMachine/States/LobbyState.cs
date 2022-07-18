@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class LobbyState : GameManagerState
+public abstract class LobbyState : GameManagerState
 {
-    private PlayerInputManager _playerInputManager;
+
 
     // Events Channels
-    private LobbyEventChannel _lobbyEvents;
+    protected LobbyEventChannel _lobbyEvents;
 
     public LobbyState(GameManagerStateMachine stateMachine, GameManagerStateFactory stateFactory) : base(stateMachine, stateFactory)
     {
@@ -16,35 +16,25 @@ public class LobbyState : GameManagerState
 
     public override void enterState()
     {
-        Debug.Log("Lobby");
-
-        AsyncSceneLoader asyncSceneLoader = _gm.GetComponent<AsyncSceneLoader>();
-        asyncSceneLoader.asyncLoadLobby();
-
-        _playerInputManager = PlayerInputManager.instance;
-        EnablePlayerInputEvents();
+        Debug.Log("Entering Lobby");
 
         _lobbyEvents = _gm.LobbyEventChannel;
         EnableLobbyEvents();
 
-        _gm.SetGameModeLocalMultiplayer();
+        loadScene();
     }
+
+    public abstract void loadScene();
 
     public override void exitState()
     {
-        DisablePlayerInputEvents();
-        Debug.Log("Starting game");
+        Debug.Log("Leaving lobby");
+        DisableLobbyEvents();
     }
 
-    public override void tryGetTransition()
-    {
-        throw new System.NotImplementedException();
-    }
+    public abstract override void tryGetTransition();
 
-    public override void updateState()
-    {
-        // nothing, just ui
-    }
+    public abstract override void updateState();
 
     private void EnableLobbyEvents()
     {
@@ -56,37 +46,5 @@ public class LobbyState : GameManagerState
         _lobbyEvents.GameStartEvent -= GameStart;
     }
 
-    private void GameStart()
-    {
-        if (_gm.ActivePlayersList.Count == _gm.NumOfPlayer)
-        {
-            transition(_stateFactory.GetPlayState(_stateMachine));
-        }
-    }
-
-    private void EnablePlayerInputEvents()
-    {
-        _playerInputManager.onPlayerJoined += OnLocalPlayerJoined;
-        _playerInputManager.onPlayerLeft += OnLocalPlayerLeft;
-    }
-
-    private void DisablePlayerInputEvents()
-    {
-        _playerInputManager.onPlayerJoined -= OnLocalPlayerJoined;
-        _playerInputManager.onPlayerLeft -= OnLocalPlayerLeft;
-    }
-
-    private void OnLocalPlayerJoined(PlayerInput obj)
-    {
-        Character player = obj.gameObject.GetComponent<Character>();
-        Debug.Log("Player joined with " + obj.currentControlScheme);
-
-        _gm.AddPlayerToActiveList(player);
-    }
-
-    private void OnLocalPlayerLeft(PlayerInput obj)
-    {
-        Debug.Log("Player with " + obj.currentControlScheme + " left");
-    }
-
+    protected abstract void GameStart();
 }

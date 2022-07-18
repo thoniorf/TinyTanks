@@ -19,8 +19,8 @@ public class GameManagerStateFactory : IStateFactory
         return new MainMenuState(_gmStateMachine, this);
     }
 
-    public LobbyState GetLobbyState(GameManagerStateMachine _gmStateMachine)
+    public LobbyState GetLocalLobbyState(GameManagerStateMachine _gmStateMachine)
     {
-        return new LobbyState(_gmStateMachine, this);
+        return new LocalLobbyState(_gmStateMachine, this);
     }
 }
