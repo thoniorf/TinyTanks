@@ -7,18 +7,18 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInputManager))]
 public class GameManager : MonoBehaviour
 {
-
     public bool isPaused;
-    public List<Character> ActivePlayersList { get; private set; }
+
+    public List<Character> ActivePlayersList { get => _activePlayerList; private set => _activePlayerList = value; }
     public int NumOfPlayer = 2;
+
     [field: SerializeField] private bool DestroyOnLoad { get; set; }
+    private List<Character> _activePlayerList;
 
 
     [Header("References")]
     [Space]
     private PlayerInputManager _playerInputManager;
-    private GameMode _gameMode;
-
 
     [Header("Event channels")]
     [Space]
@@ -39,8 +39,6 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_gameMode != null) _gameMode.Disable();
-
         GameModeEventChannel.PlayerScoreEvent -= PlayerScore;
     }
 
@@ -51,11 +49,12 @@ public class GameManager : MonoBehaviour
 
     public void AddPlayerToActiveList(Character player)
     {
-        if (ActivePlayersList == null)
+
+        if (_activePlayerList == null)
         {
-            ActivePlayersList = new List<Character>();
+            _activePlayerList = new List<Character>();
         }
 
-        ActivePlayersList.Add(player);
+        _activePlayerList.Add(player);
     }
 }

@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public abstract class LobbyState : GameManagerState
+public abstract class LobbyState : GameManagerState, GameInputs.IJoinActions
 {
 
 
     // Events Channels
     protected LobbyEventChannel _lobbyEvents;
 
+    // Input to join
+    private GameInputs _gameInputs;
+
     public LobbyState(GameManagerStateMachine stateMachine, GameManagerStateFactory stateFactory) : base(stateMachine, stateFactory)
     {
+        _gameInputs = new GameInputs();
+
+        // we care about Join actions maps only
+        _gameInputs.Join.SetCallbacks(this);
+        _gameInputs.Join.Enable();
     }
 
     public override void enterState()
@@ -47,4 +55,14 @@ public abstract class LobbyState : GameManagerState
     }
 
     protected abstract void GameStart();
+
+    public void OnJoin(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            OnLocalPlayerJoined();
+        }
+    }
+
+    protected abstract void OnLocalPlayerJoined();
 }

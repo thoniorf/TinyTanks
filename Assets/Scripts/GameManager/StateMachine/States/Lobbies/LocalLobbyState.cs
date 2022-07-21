@@ -15,14 +15,14 @@ public class LocalLobbyState : LobbyState
     {
         base.enterState();
         _playerInputManager = PlayerInputManager.instance;
-        EnablePlayerInputEvents();
+        //EnablePlayerInputEvents();
 
     }
 
     public override void exitState()
     {
         base.exitState();
-        DisablePlayerInputEvents();
+        //DisablePlayerInputEvents();
     }
 
     public override void loadScene()
@@ -38,29 +38,16 @@ public class LocalLobbyState : LobbyState
         }
     }
 
-    private void EnablePlayerInputEvents()
+    protected override void OnLocalPlayerJoined()
     {
-        _playerInputManager.onPlayerJoined += OnLocalPlayerJoined;
-        _playerInputManager.onPlayerLeft += OnLocalPlayerLeft;
-    }
 
-    private void DisablePlayerInputEvents()
-    {
-        _playerInputManager.onPlayerJoined -= OnLocalPlayerJoined;
-        _playerInputManager.onPlayerLeft -= OnLocalPlayerLeft;
-    }
+        Debug.Log("I wish to play");
+        // instantiate the lobby player prefab
+        // update the player active to list with control schema
+        // we don't want double control schema
+        // the list will be used be playstate to instantiate
 
-    private void OnLocalPlayerJoined(PlayerInput obj)
-    {
-        Character player = obj.gameObject.GetComponent<Character>();
-        Debug.Log("Player joined with " + obj.currentControlScheme);
-
-        _gm.AddPlayerToActiveList(player);
-    }
-
-    private void OnLocalPlayerLeft(PlayerInput obj)
-    {
-        Debug.Log("Player with " + obj.currentControlScheme + " left");
+        // _gm.AddPlayerToActiveList(player);
     }
 
     public override void tryGetTransition()

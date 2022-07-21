@@ -195,6 +195,45 @@ public partial class @GameInputs : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Join"",
+            ""id"": ""58c83a72-3ec2-4b4c-9ba5-8b68c4cea98a"",
+            ""actions"": [
+                {
+                    ""name"": ""Join"",
+                    ""type"": ""Button"",
+                    ""id"": ""6042f6e2-dafb-4526-b84c-219936bfef6d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d1492be2-d0cf-4eaa-bad6-5cd807de5e27"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardAndMouse"",
+                    ""action"": ""Join"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f899465-626a-4ab3-ad84-7ae5a5655e75"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Join"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -235,6 +274,9 @@ public partial class @GameInputs : IInputActionCollection2, IDisposable
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Pause = m_Menu.FindAction("Pause", throwIfNotFound: true);
+        // Join
+        m_Join = asset.FindActionMap("Join", throwIfNotFound: true);
+        m_Join_Join = m_Join.FindAction("Join", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -372,6 +414,39 @@ public partial class @GameInputs : IInputActionCollection2, IDisposable
         }
     }
     public MenuActions @Menu => new MenuActions(this);
+
+    // Join
+    private readonly InputActionMap m_Join;
+    private IJoinActions m_JoinActionsCallbackInterface;
+    private readonly InputAction m_Join_Join;
+    public struct JoinActions
+    {
+        private @GameInputs m_Wrapper;
+        public JoinActions(@GameInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Join => m_Wrapper.m_Join_Join;
+        public InputActionMap Get() { return m_Wrapper.m_Join; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(JoinActions set) { return set.Get(); }
+        public void SetCallbacks(IJoinActions instance)
+        {
+            if (m_Wrapper.m_JoinActionsCallbackInterface != null)
+            {
+                @Join.started -= m_Wrapper.m_JoinActionsCallbackInterface.OnJoin;
+                @Join.performed -= m_Wrapper.m_JoinActionsCallbackInterface.OnJoin;
+                @Join.canceled -= m_Wrapper.m_JoinActionsCallbackInterface.OnJoin;
+            }
+            m_Wrapper.m_JoinActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Join.started += instance.OnJoin;
+                @Join.performed += instance.OnJoin;
+                @Join.canceled += instance.OnJoin;
+            }
+        }
+    }
+    public JoinActions @Join => new JoinActions(this);
     private int m_KeyboardAndMouseSchemeIndex = -1;
     public InputControlScheme KeyboardAndMouseScheme
     {
@@ -399,5 +474,9 @@ public partial class @GameInputs : IInputActionCollection2, IDisposable
     public interface IMenuActions
     {
         void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IJoinActions
+    {
+        void OnJoin(InputAction.CallbackContext context);
     }
 }
