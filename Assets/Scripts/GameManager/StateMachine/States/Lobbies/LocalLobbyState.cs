@@ -41,6 +41,7 @@ public class LocalLobbyState : LobbyState
     protected override void OnLocalPlayerJoined()
     {
 
+        _lobbyEvents.JoinPlayer();
         Debug.Log("I wish to play");
         // instantiate the lobby player prefab
         // update the player active to list with control schema

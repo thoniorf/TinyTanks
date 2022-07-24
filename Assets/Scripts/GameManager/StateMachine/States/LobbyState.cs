@@ -58,8 +58,24 @@ public abstract class LobbyState : GameManagerState, GameInputs.IJoinActions
 
     public void OnJoin(InputAction.CallbackContext context)
     {
+
+
         if (context.phase == InputActionPhase.Performed)
         {
+            string outputString = "";
+            InputDevice inputDevice = context.control.device;
+
+            outputString += inputDevice.displayName + " supported in ";
+            foreach (InputControlScheme _controlScheme in _gameInputs.controlSchemes)
+            {
+                if (_controlScheme.SupportsDevice(inputDevice))
+                {
+                    outputString += _controlScheme.name + " ";
+                }
+
+            }
+
+            Debug.Log(outputString);
             OnLocalPlayerJoined();
         }
     }

@@ -7,11 +7,17 @@ using UnityEngine.Events;
 public class LobbyEventChannel : ScriptableObject
 {
     public event UnityAction GameStartEvent = delegate { };
+    public event UnityAction PlayerJoinEvent = delegate { };
 
 
     public void StartGame()
     {
         GameStartEvent.Invoke();
+    }
+
+    public void JoinPlayer()
+    {
+        PlayerJoinEvent.Invoke();
     }
 
 
