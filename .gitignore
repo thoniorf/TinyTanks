@@ -13,15 +13,13 @@
 
 # Assets
 [Aa]ssets/AssetStoreTools*
-[Aa]ssets/ExampleAssets/
-[Aa]ssets/Samples/
-[Aa]ssets/TextMesh Pro/
+[Aa]ssets/ExampleAssets*
+[Aa]ssets/Samples*
+[Aa]ssets/TextMesh Pro*
 
 #Unity Generated lightmap files
-Lightmap-*.png
-Lightmap-*.png.meta
-*.exr
-*.exr.meta
+Lightmap-*.png*
+*.exr*
 
 
 # Visual Studio cache directory
