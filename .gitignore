@@ -13,6 +13,7 @@
 
 # Assets - only scripts
 [Aa]ssets/AssetStoreTools*
+[Aa]ssets/ExampleAssets/
 
 
 # Visual Studio cache directory
