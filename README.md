@@ -11,8 +11,8 @@ Wonder about the world and these creatures.
 ## USP
 * Top-down 3D shooter with strange creatures
 * Local multiplayer
-* Marvelous aesthetics
-* Peaciful environment but ferocious battles 
+* Good-enough aesthetics
+* Different environments
 
   
 
