@@ -13,15 +13,6 @@
 
 # Assets - only scripts
 [Aa]ssets/AssetStoreTools*
-[Aa]ssets/Scenes/
-[Aa]ssets/ExampleAssets/
-[Aa]ssets/Materials/
-[Aa]ssets/Prefabs/
-[Aa]ssets/ScriptableObjects/
-[Aa]ssets/Settings/
-[Aa]ssets/UI/
-[Aa]ssets/UI Toolkit/
-[Aa]ssets/TextMesh Pro/
 
 
 # Visual Studio cache directory
